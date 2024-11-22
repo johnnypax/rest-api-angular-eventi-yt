@@ -1,0 +1,18 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Data</th>
+            <th>Location</th>
+            <th>Posti</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let evt of elenco">
+            <td>{{ evt.nome }}</td>
+            <td>{{ evt.data }}</td>
+            <td>{{ evt.location }}</td>
+            <td>{{ evt.partecipanti }}</td>
+        </tr>
+    </tbody>
+</table>

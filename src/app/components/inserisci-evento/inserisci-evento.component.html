@@ -1,0 +1,28 @@
+<h1>Inserisci evento</h1>
+
+<div class="form-group">
+    <label for="nom">Nome</label>
+    <input type="text" class="form-control" [(ngModel)]="nom" id="nom">
+</div>
+
+<div class="form-group">
+    <label for="des">Descrizione</label>
+    <textarea class="form-control" [(ngModel)]="des" id="des"></textarea>
+</div>
+
+<div class="form-group">
+    <label for="dat">Data</label>
+    <input type="date" class="form-control" [(ngModel)]="dat" id="dat">
+</div>
+
+<div class="form-group">
+    <label for="loc">Location</label>
+    <input type="text" class="form-control" [(ngModel)]="loc" id="loc">
+</div>
+
+<div class="form-group">
+    <label for="par">Partecipanti</label>
+    <input type="number" min="0" class="form-control" [(ngModel)]="par" id="par">
+</div>
+
+<button class="btn btn-primary mt-2" (click)="Inserisci()">Salva</button>
