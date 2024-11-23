@@ -9,33 +9,80 @@ export class EventoService {
 
   constructor() { }
 
+  private isEvento(obj: any): obj is Evento{
+    if(typeof obj !== 'object' || obj === null) return false;
+
+    return (
+      (typeof obj.codice === 'string' || obj.codice === undefined) &&
+      (typeof obj.nome === 'string' || obj.nome === undefined) &&
+      (typeof obj.descrizione === 'string' || obj.descrizione === undefined) &&
+      (typeof obj.data === 'string' || obj.data === undefined) &&
+      (typeof obj.location === 'string' || obj.location === undefined) &&
+      (typeof obj.partecipanti === 'number' || obj.partecipanti === undefined)
+    );
+  }
+
   async Lista(): Promise<Evento[]> {
-    let risultato : Risposta = await (await fetch("http://localhost:4000/events")).json()
-  
-    if(risultato.status == "SUCCESS")
-      if(Array.isArray(risultato.data))      //Verifichiamo che sia una lista di oggetti
-        return risultato.data;
-    else
-      console.log(risultato.data);            //Stringa contenente errore
+    try{
+
+      const response = await fetch("http://localhost:4000/events");
+
+      if(!response.ok){
+        console.log(`Errore HTTP: ${response.status}`)
+        return [];
+      }
+
+      const risultato: Risposta = await response.json();
+
+      if(risultato.status === "SUCCESS")
+        if(Array.isArray(risultato.data)){
+          if(risultato.data.every(e => this.isEvento(e)))
+            return risultato.data;
+          else
+            console.log("Dati non validi, campi alterati")
+        }
+        else
+          console.log("Dati non validi")
+      else
+        console.log("Errore di API", risultato.data);
+      
+    } catch (error) {
+      console.log(`ERRORE: ${error}`);
+    }
 
     return [];
+    
   }
 
   async Inserimento(evt: Evento): Promise<boolean>{
-    let risultato : Risposta = await (await fetch("http://localhost:4000/events", 
-      {
-        headers: {
-          "Content-Type": "application/json"
-        },
-        method: "POST",
-        body: JSON.stringify(evt)
+    try{
+      
+      const response = await fetch("http://localhost:4000/events", 
+        {
+          headers: {
+            "Content-Type": "application/json"
+          },
+          method: "POST",
+          body: JSON.stringify(evt)
+        }
+      );
+
+      if(!response.ok){
+        console.log(`Errore HTTP: ${response.status}`);
+        return false;
       }
-    )).json();
 
-    if(risultato.status == "SUCCESS")
-      return true;
+      const risultato : Risposta = await response.json();
 
-    console.log(risultato.data);
+      if(risultato.status === "SUCCESS")
+        return true;
+
+      console.log(`Errore API: ${risultato.data}`)
+
+    } catch (error){
+      console.log(`ERRORE: ${error}`)
+    }
+
     return false;
   }
 }
