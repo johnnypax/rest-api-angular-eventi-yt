@@ -1,0 +1,28 @@
+<h1>Modifica evento</h1>
+
+<div class="form-group">
+    <label for="nom">Nome</label>
+    <input type="text" class="form-control" [(ngModel)]="nome" id="nom">
+</div>
+
+<div class="form-group">
+    <label for="des">Descrizione</label>
+    <textarea class="form-control" [(ngModel)]="desc" id="des"></textarea>
+</div>
+
+<div class="form-group">
+    <label for="dat">Data</label>
+    <input type="date" class="form-control" [(ngModel)]="data" id="dat">
+</div>
+
+<div class="form-group">
+    <label for="loc">Location</label>
+    <input type="text" class="form-control" [(ngModel)]="loca" id="loc">
+</div>
+
+<div class="form-group">
+    <label for="par">Partecipanti</label>
+    <input type="number" min="0" class="form-control" [(ngModel)]="part" id="par">
+</div>
+
+<button class="btn btn-primary mt-2" (click)="Modifica()">Effettua Modifica</button>

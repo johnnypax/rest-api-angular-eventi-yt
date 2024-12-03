@@ -1,0 +1,15 @@
+<h1>Dettaglio evento {{ nome }}</h1>
+
+<ul>
+    <li>Descrizione: {{ desc }}</li>
+    <li>Data: {{ data }}</li>
+    <li>Location: {{ loca }}</li>
+    <li>Partecipanti {{ part }}</li>
+</ul>
+
+<button type="button" class="btn btn-danger" (click)="Elimina(codi)">
+    Elimina
+</button>
+<button type="button" class="btn btn-warning" (click)="Modifica(codi)">
+    Modifica
+</button>

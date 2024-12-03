@@ -9,8 +9,8 @@ export class EventoService {
 
   constructor() { }
 
-  private isEvento(obj: any): obj is Evento{
-    if(typeof obj !== 'object' || obj === null) return false;
+  private isEvento(obj: any): obj is Evento {
+    if (typeof obj !== 'object' || obj === null) return false;
 
     return (
       (typeof obj.codice === 'string' || obj.codice === undefined) &&
@@ -23,20 +23,20 @@ export class EventoService {
   }
 
   async Lista(): Promise<Evento[]> {
-    try{
+    try {
 
       const response = await fetch("http://localhost:4000/events");
 
-      if(!response.ok){
+      if (!response.ok) {
         console.log(`Errore HTTP: ${response.status}`)
         return [];
       }
 
       const risultato: Risposta = await response.json();
 
-      if(risultato.status === "SUCCESS")
-        if(Array.isArray(risultato.data)){
-          if(risultato.data.every(e => this.isEvento(e)))
+      if (risultato.status === "SUCCESS")
+        if (Array.isArray(risultato.data)) {
+          if (risultato.data.every(e => this.isEvento(e)))
             return risultato.data;
           else
             console.log("Dati non validi, campi alterati")
@@ -45,19 +45,19 @@ export class EventoService {
           console.log("Dati non validi")
       else
         console.log("Errore di API", risultato.data);
-      
+
     } catch (error) {
       console.log(`ERRORE: ${error}`);
     }
 
     return [];
-    
+
   }
 
-  async Inserimento(evt: Evento): Promise<boolean>{
-    try{
-      
-      const response = await fetch("http://localhost:4000/events", 
+  async Inserimento(evt: Evento): Promise<boolean> {
+    try {
+
+      const response = await fetch("http://localhost:4000/events",
         {
           headers: {
             "Content-Type": "application/json"
@@ -66,6 +66,88 @@ export class EventoService {
           body: JSON.stringify(evt)
         }
       );
+
+      if (!response.ok) {
+        console.log(`Errore HTTP: ${response.status}`);
+        return false;
+      }
+
+      const risultato: Risposta = await response.json();
+
+      if (risultato.status === "SUCCESS")
+        return true;
+
+      console.log(`Errore API: ${risultato.data}`)
+
+    } catch (error) {
+      console.log(`ERRORE: ${error}`)
+    }
+
+    return false;
+  }
+
+  async Eliminazione(codice: string): Promise<boolean> {
+    try {
+
+      const response = await fetch(`http://localhost:4000/events/${codice}`, {
+        method: "DELETE"
+      })
+
+      if (!response.ok) {
+        console.log(`Errore HTTP: ${response.status}`);
+        return false;
+      }
+
+      const risultato: Risposta = await response.json();
+
+      if (risultato.status === "SUCCESS")
+        return true;
+
+      console.log("ERRORE API", risultato.data);
+
+    } catch (error) {
+      console.log(`ERRORE: ${error}`)
+    }
+
+    return false;
+  }
+
+  async Dettaglio(varCodice: string): Promise<Evento | null> {
+    try {
+      const response = await fetch(`http://localhost:4000/events/${varCodice}`);
+
+      if(!response.ok){
+        console.log(`Errore HTTP: ${response.status}`);
+        return null;
+      }
+
+      const risultato: Risposta = await response.json();
+
+      if(risultato.status === "SUCCESS" && risultato.data && this.isEvento(risultato.data)){
+        return risultato.data;
+      }
+
+      console.log("ERRORE API", risultato.data);
+    } catch (error) {
+      console.log(`ERRORE: ${error}`)
+    }
+
+    return null;
+  }
+
+  async Modifica(evt: Evento) : Promise<boolean> {
+    try{
+
+      const varCodice = evt.codice;
+      evt.codice = undefined;
+
+      const response = await fetch(`http://localhost:4000/events/${varCodice}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(evt)
+      })
 
       if(!response.ok){
         console.log(`Errore HTTP: ${response.status}`);
@@ -77,9 +159,8 @@ export class EventoService {
       if(risultato.status === "SUCCESS")
         return true;
 
-      console.log(`Errore API: ${risultato.data}`)
-
-    } catch (error){
+      console.log("ERRORE API", risultato.data);
+    } catch (error) {
       console.log(`ERRORE: ${error}`)
     }
 

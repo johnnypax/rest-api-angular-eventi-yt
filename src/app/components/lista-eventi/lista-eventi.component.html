@@ -5,14 +5,25 @@
             <th>Data</th>
             <th>Location</th>
             <th>Posti</th>
+            <th>Azioni</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let evt of elenco">
-            <td>{{ evt.nome }}</td>
+            <td>
+                <a href="/eventi/dettaglio/{{ evt.codice }}">{{ evt.nome }}</a>
+            </td>
             <td>{{ evt.data }}</td>
             <td>{{ evt.location }}</td>
             <td>{{ evt.partecipanti }}</td>
+            <td>
+                <button type="button" class="btn btn-danger" (click)="Elimina(evt.codice)">
+                    Elimina
+                </button>
+                <button type="button" class="btn btn-warning" (click)="Modifica(evt.codice)">
+                    Modifica
+                </button>
+            </td>
         </tr>
     </tbody>
 </table>

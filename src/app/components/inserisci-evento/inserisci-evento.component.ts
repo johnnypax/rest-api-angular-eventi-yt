@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Evento } from '../../models/evento';
 import { EventoService } from '../../services/evento.service';
 import { Router } from '@angular/router';
-import convertiData from '../../utils/date-converter';
+import { convertiData }  from '../../utils/date-converter';
 
 @Component({
   selector: 'app-inserisci-evento',
